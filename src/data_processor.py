@@ -40,6 +40,7 @@ class DataProcessor():
     
     @classmethod
     def remove_topics_from_dataset(cls,dataset,boolean_mask,topics):
+
         dataset = dataset.join(boolean_mask)
 
         for topic in topics:
