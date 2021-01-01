@@ -40,7 +40,7 @@ class DataCleaner():
         return cleaned
 
     @classmethod
-    def clean_text_naive_bayes(cls,text):
+    def clean_text_for_classical_methods(cls,text):
         text = cls.remove_html(text)
         text = cls.lowercase(text)
         text = cls.replace_spaces(text)
