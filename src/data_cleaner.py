@@ -1,4 +1,5 @@
 import re
+from nltk.stem.snowball import SnowballStemmer
 
 class DataCleaner():
 
@@ -38,6 +39,18 @@ class DataCleaner():
         cleaned = cleaned.strip()
         cleaned = cleaned.replace("\n"," ")
         return cleaned
+    
+    @classmethod
+    def do_stemming(cls,text):
+        stemmer = SnowballStemmer("english")
+
+        stemSentence = ""
+        for word in text.split():
+            stem = stemmer.stem(word)
+            stemSentence += stem
+            stemSentence += " "
+        stemSentence = stemSentence.strip()
+        return stemSentence
 
     @classmethod
     def clean_text_for_classical_methods(cls,text):
@@ -46,5 +59,6 @@ class DataCleaner():
         text = cls.replace_spaces(text)
         text = cls.remove_contractions(text)
         text = cls.remove_punctuation(text)
+        #text = cls.do_stemming(text)
         
         return text
