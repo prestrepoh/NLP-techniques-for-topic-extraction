@@ -23,7 +23,7 @@ class ModelEvaluator():
 
             i += 1
         
-        accuracy_per_label["no topic"] = ModelEvaluator.get_accuracy_comments_with_no_topic(targets, predictions)
+        accuracy_per_label["no topic"] = cls.get_accuracy_comments_with_no_topic(targets, predictions)
         
         return accuracy_per_label
     
