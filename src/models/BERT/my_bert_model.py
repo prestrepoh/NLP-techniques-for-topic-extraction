@@ -79,16 +79,43 @@ class MyBERTModel(pl.LightningModule):
         predictions = np.concatenate((predictions,result['predictions']))
         targets = np.concatenate((targets,result['targets']))
       
-      self.evaluate_results(predictions, targets)
+      total_accuracy, accuracy_per_label = self.evaluate_results(predictions, targets)
+      self.log('total_accuracy', total_accuracy)
+      self.log('accuracy_per_label',accuracy_per_label)
+    
+    #******Test******
+    #This method runs in each GPU
+    def test_step(self, batch, batch_idx):
+      return self.general_step(batch, batch_idx, "val")
+    
+    #This method aggregates the results of validation_step in the different GPUs
+    def test_step_end (self, aggregated_outputs):
+      outputs = torch.sigmoid(aggregated_outputs['outputs']).cpu().detach().numpy().tolist()
+      predictions = (np.array(outputs) >= 0.5).astype(int)
+
+      targets = aggregated_outputs['targets'].cpu().detach().numpy()
+
+      return {'predictions': predictions, 'targets': targets}
+    
+    #This method runs at the end of each epoch
+    def test_epoch_end(self, results_of_each_batch):
+      predictions = np.empty([0,len(self.labels)])
+      targets = np.empty([0,len(self.labels)])
+
+      for result in results_of_each_batch:
+        predictions = np.concatenate((predictions,result['predictions']))
+        targets = np.concatenate((targets,result['targets']))
+      
+      total_accuracy, accuracy_per_label = self.evaluate_results(predictions, targets)
+      print(f"Total accuracy: {total_accuracy}")
+      print(f"Accuracy per label: {accuracy_per_label}")
 
     def evaluate_results(self, predictions, targets):
       #binary relevance
       total_accuracy = ModelEvaluator.get_total_accuracy(targets, predictions)
-      self.log('total_accuracy', total_accuracy)
-
       #one vs rest
       accuracy_per_label = ModelEvaluator.get_accuracy_per_label(self.labels,targets,predictions)
-      self.log('accuracy_per_label',accuracy_per_label)
+      return total_accuracy, accuracy_per_label
 
     def configure_optimizers(self):
       return torch.optim.Adam(params = self.parameters(), lr=self.hparams["learning_rate"])
