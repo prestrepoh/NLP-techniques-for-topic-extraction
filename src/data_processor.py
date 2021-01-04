@@ -47,8 +47,9 @@ class DataProcessor():
             dataset = dataset[~cls.row_contains_only_this_topic(dataset,topic)]
         
         dataset = dataset.drop(columns=topics)
+        #dataset["list"] = dataset.iloc[:,9:].values.tolist()
 
-        remaining_topics = dataset.iloc[:,9:].columns
+        remaining_topics = dataset.iloc[:,8:].columns
 
         return dataset, remaining_topics
 
