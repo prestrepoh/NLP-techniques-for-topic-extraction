@@ -4,8 +4,8 @@ class DataProcessor():
 
     @classmethod
     def obtain_boolean_mask_from_dataset(cls,dataset):
-        dataset_topics = cls.get_column_indexes_as_list(dataset["Topic"])
-        boolean_mask = cls.generate_boolean_mask(dataset["Topic"],dataset_topics).astype(int)
+        dataset_topics = cls.get_column_indexes_as_list(dataset["topic"])
+        boolean_mask = cls.generate_boolean_mask(dataset["topic"],dataset_topics).astype(int)
         return boolean_mask
     
     @classmethod
@@ -35,7 +35,7 @@ class DataProcessor():
     
     @classmethod
     def get_underrepresented_topics(cls,dataset,threshold):
-        dataset_topics = cls.get_column_indexes(dataset["Topic"])
+        dataset_topics = cls.get_column_indexes(dataset["topic"])
         return dataset_topics[dataset_topics < threshold].index.tolist()
     
     @classmethod
@@ -47,7 +47,6 @@ class DataProcessor():
             dataset = dataset[~cls.row_contains_only_this_topic(dataset,topic)]
         
         dataset = dataset.drop(columns=topics)
-        #dataset["list"] = dataset.iloc[:,9:].values.tolist()
 
         remaining_topics = dataset.iloc[:,9:].columns
 
