@@ -6,7 +6,7 @@ class BERTCustomDataset(Dataset):
     def __init__(self, dataframe, tokenizer, max_len):
         self.tokenizer = tokenizer
         self.data = dataframe
-        self.comment_text = dataframe.Conversation
+        self.comment_text = dataframe.conversation
         self.targets = self.data.list
         self.max_len = max_len
 
