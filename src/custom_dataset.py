@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset, DataLoader, RandomSampler, SequentialSampler
 
-class BERTCustomDataset(Dataset):
+class CustomDataset(Dataset):
 
     def __init__(self, dataframe, tokenizer, max_len):
         self.tokenizer = tokenizer
@@ -16,7 +16,6 @@ class BERTCustomDataset(Dataset):
     def __getitem__(self, index):
         
         comment_text = str(self.comment_text[index])
-        #comment_text = " ".join(comment_text.split())
 
         inputs = self.tokenizer.encode_plus(
             comment_text,
