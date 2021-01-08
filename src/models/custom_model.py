@@ -121,7 +121,7 @@ class CustomModel(pl.LightningModule):
 
     #******Dataloaders******
     def train_dataloader(self):
-      return DataLoader(self.training_dataset, batch_size=self.hparams["train_batch_size"], shuffle= self.hparams["shuffle"])
+      return DataLoader(self.training_dataset, batch_size=self.hparams["train_batch_size"], shuffle= self.hparams["shuffle"], num_workers=32)
 
     def val_dataloader(self):
-      return DataLoader(self.validation_dataset, batch_size=self.hparams["validation_batch_size"], shuffle= False)
+      return DataLoader(self.validation_dataset, batch_size=self.hparams["validation_batch_size"], shuffle= False, num_workers=32)
